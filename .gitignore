@@ -1,0 +1,73 @@
+# Web Guardian
+#
+# Keeps tokens, keys, credentials and local environment files out of the
+# repository. Values the workflow needs are supplied as GitHub Actions
+# encrypted secrets, never as committed files.
+#
+# Your own config/ files and baselines/ are meant to be committed: the
+# workflow reads them from the repository.
+
+# Secrets and environment
+.env
+.env.*
+!.env.example
+*.env
+*.secret
+secrets.*
+*.secrets
+credentials
+credentials.*
+*.credentials
+auth.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.cert
+*.crt
+*.der
+*.keystore
+*.jks
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+.npmrc
+.netrc
+.aws/
+.gcloud/
+*.gpg
+*.asc
+
+# Dependencies and build output
+node_modules/
+dist/
+
+# Raw run output (published to the runs-data branch by the workflow)
+artifacts/
+
+# Workflow staging and test output
+_site/
+test-results/
+playwright-report/
+.playwright/
+playwright/.cache/
+.vitest/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor and OS files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.sw?
+*.local

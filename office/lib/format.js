@@ -1,0 +1,77 @@
+// Time and duration text helpers. Pure functions.
+
+const NOT_RECORDED = "not recorded";
+
+function num(v) {
+  return typeof v === "number" && isFinite(v) ? v : null;
+}
+
+function pad2(n) {
+  return n < 10 ? "0" + n : String(n);
+}
+
+// "MM:SS.t" from milliseconds (tenths truncated, negatives clamp to 0).
+export function formatClock(ms) {
+  const v = num(ms);
+  if (v === null) return NOT_RECORDED;
+  const total = Math.floor(Math.max(0, v) / 100); // tenths
+  const tenths = total % 10;
+  const secs = Math.floor(total / 10) % 60;
+  const mins = Math.floor(total / 600);
+  return pad2(mins) + ":" + pad2(secs) + "." + tenths;
+}
+
+// Short human duration: "850 ms", "1.2 s", "2 min 5 s".
+export function formatDuration(ms) {
+  const v = num(ms);
+  if (v === null) return NOT_RECORDED;
+  const m = Math.max(0, Math.round(v));
+  if (m < 1000) return m + " ms";
+  if (m < 60000) return (Math.round(m / 100) / 10) + " s";
+  const mins = Math.floor(m / 60000);
+  const secs = Math.round((m % 60000) / 1000);
+  return mins + " min " + secs + " s";
+}
+
+export function formatPercent(p) {
+  const v = num(p);
+  if (v === null) return NOT_RECORDED;
+  return v.toFixed(1) + "%";
+}
+
+export function plural(n, one, many) {
+  return n + " " + (n === 1 ? one : (many || one + "s"));
+}
+
+// Truncate to max characters with an ASCII ellipsis.
+export function truncate(s, max) {
+  const t = typeof s === "string" ? s : "";
+  if (t.length <= max) return t;
+  return t.slice(0, Math.max(0, max - 3)) + "...";
+}
+
+// "2026-11-13 12:00 NZDT" in the viewer's time zone (timeZone is for tests).
+// Invalid or missing input returns "date not recorded".
+export function formatLocalDateTime(iso, timeZone) {
+  if (typeof iso !== "string" || !iso) return "date not recorded";
+  const t = Date.parse(iso);
+  if (!isFinite(t)) return "date not recorded";
+  try {
+    const opts = {
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+      timeZoneName: "short",
+    };
+    if (timeZone) opts.timeZone = timeZone;
+    const parts = {};
+    new Intl.DateTimeFormat("en-NZ", opts).formatToParts(new Date(t)).forEach(function (p) {
+      parts[p.type] = p.value;
+    });
+    return parts.year + "-" + parts.month + "-" + parts.day + " " + parts.hour + ":" + parts.minute +
+      " " + (parts.timeZoneName || "");
+  } catch (e) {
+    return "date not recorded";
+  }
+}
+
+export { NOT_RECORDED };

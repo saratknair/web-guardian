@@ -1,0 +1,27 @@
+import { describe, it, expect } from "vitest";
+import { remoteDisplayName } from "../../src/admin/git-feedback.js";
+import { EXAMPLE_REMOTE_HTTPS, EXAMPLE_REMOTE_SSH, EXAMPLE_REPOSITORY } from "../helpers/fixtures.js";
+
+describe("remoteDisplayName", () => {
+  it("shows owner/repo for GitHub https and ssh remotes", () => {
+    expect(remoteDisplayName(EXAMPLE_REMOTE_HTTPS)).toBe(EXAMPLE_REPOSITORY);
+    expect(remoteDisplayName(EXAMPLE_REMOTE_SSH)).toBe(EXAMPLE_REPOSITORY);
+    expect(remoteDisplayName("ssh://git@github.com/o/r")).toBe("o/r");
+  });
+
+  it("strips credentials, including a password with an at sign", () => {
+    const a = remoteDisplayName("https://user:FAKE-NOT-REAL@github.com/o/r.git") as string;
+    expect(a).toBe("o/r");
+    const b = remoteDisplayName("https://user:FAKE@PW@gitlab.example.com/grp/proj.git") as string;
+    expect(b).toBe("gitlab.example.com/grp/proj");
+    expect(b).not.toContain("PW@");
+    expect(b).not.toContain("user");
+  });
+
+  it("shows host/path for non-GitHub remotes and null when empty", () => {
+    expect(remoteDisplayName("git@gitlab.com:grp/proj.git")).toBe("gitlab.com/grp/proj");
+    expect(remoteDisplayName("")).toBeNull();
+    expect(remoteDisplayName(null)).toBeNull();
+    expect(remoteDisplayName(undefined)).toBeNull();
+  });
+});

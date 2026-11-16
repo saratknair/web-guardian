@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web Guardian</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="./vendor/chart.umd.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#view">Skip to main content</a>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar__brand">
+        <div class="topbar__dot" aria-hidden="true"></div>
+        <div>
+          <h1 class="topbar__title">Web Guardian</h1>
+          <p class="topbar__subtitle">Website quality monitoring</p>
+        </div>
+      </div>
+      <div class="topbar__meta" id="header-meta"></div>
+    </header>
+
+    <nav aria-label="Primary" class="row" id="primary-nav">
+      <a class="btn btn--ghost" href="#/" data-nav="overview">Overview</a>
+      <a class="btn btn--ghost" href="#/findings" data-nav="findings">Findings</a>
+      <a class="btn btn--ghost" href="./office/">Virtual Office</a>
+    </nav>
+
+    <main id="view" class="view" tabindex="-1">
+      <p class="loading">Loading dashboard...</p>
+    </main>
+
+    <footer class="footer muted">
+      <p>Ignored issues are listed on the Ignored page. Reasons and reviewer names are published as entered.</p>
+    </footer>
+  </div>
+
+  <div id="sr-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div id="sr-alert" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+  <dialog id="lightbox" aria-label="Image viewer"></dialog>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

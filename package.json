@@ -1,0 +1,40 @@
+{
+  "name": "web-guardian",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic website quality monitor with a local admin console, static dashboard and virtual office.",
+  "scripts": {
+    "console": "node scripts/run-admin-server.mjs",
+    "guardian": "node scripts/run-guardian.mjs",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:property": "vitest run tests/property",
+    "verify": "node scripts/verify.mjs",
+    "check": "playwright test",
+    "approve": "node dist/index.js approve",
+    "list-pending": "node dist/index.js list-pending",
+    "init-config": "node scripts/init-config.mjs",
+    "scan:history": "node scripts/dev/scan-history-comments.mjs",
+    "scan:secrets": "node scripts/dev/scan-secrets.mjs",
+    "check:links": "node scripts/dev/check-doc-links.mjs"
+  },
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.64.1",
+    "pixelmatch": "6.0.0",
+    "pngjs": "7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "@types/pngjs": "6.0.5",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9",
+    "fast-check": "3.23.2"
+  }
+}
